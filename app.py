@@ -2,6 +2,8 @@ import os
 
 import openai
 import json
+import logging
+from logging import FileHandler
 from flask import Flask, redirect, render_template, request, url_for
 
 app = Flask(__name__)
@@ -20,7 +22,8 @@ def index():
             temperature=0.6,
             max_tokens=512,
         )
-        print(json.dumps(response))
+        app.logger.info("question: %s" % question)
+        app.logger.info("response: %s" % response)
         return redirect(url_for("index", question=question, result=response.choices[0].text))
 
     result = request.args.get("result")
@@ -32,4 +35,6 @@ def generate_prompt(question):
     return question
 
 if __name__ == '__main__':
+    logHandler = logging.FileHandler('flask.log')
+    app.logger.addHandler(logHandler)
     app.run(host='0.0.0.0', port=8081, debug=True)
