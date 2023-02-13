@@ -3,15 +3,15 @@
   <title>OpenAI Quickstart</title>
   <link
     rel="shortcut icon"
-    href="{{ url_for('static', filename='dog.png') }}"
+    href="./static/dog.png"
   />
-  <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}" />
+  <link rel="stylesheet" href="./static/main.css" />
 </head>
 
 <body>
-  <img src="{{ url_for('static', filename='dog.png') }}" class="icon" />
+  <img src="./static/dog.png" class="icon" />
   <h3>ChatGPT 体验</h3>
-  <form action="/" method="post">
+  <form action="./" method="post">
     <input type="text" name="question" placeholder="请输入您的问题" required />
     <input type="submit" value="提交" />
   </form>
