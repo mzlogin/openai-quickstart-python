@@ -60,7 +60,13 @@ input[type="submit"] {
   text-align: center;
   cursor: pointer;
 }
+.question {
+  font-weight: bold;
+  margin-top: 40px;
+  width: 320px;
+}
 .result {
   font-weight: bold;
   margin-top: 40px;
+  width: 320px;
 }
