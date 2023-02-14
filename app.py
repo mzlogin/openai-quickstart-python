@@ -13,18 +13,31 @@ openai.api_key = os.getenv("OPENAI_API_KEY")
 def index():
     if request.method == "POST":
         question = request.form["question"]
-        response = openai.Completion.create(
-            model="text-davinci-003",
-            # model="text-curie-001",
-            # model="text-babbage-001",
-            # model="text-ada-001",
-            prompt=generate_prompt(question),
-            temperature=0.6,
-            max_tokens=512,
-        )
+        result = ''
         app.logger.info("question: %s" % question)
-        app.logger.info("response: %s" % response)
-        return redirect(url_for("index", question=question, result=response.choices[0].text))
+        try:
+            response = openai.Completion.create(
+                model="text-davinci-003",
+                # model="text-curie-001",
+                # model="text-babbage-001",
+                # model="text-ada-001",
+                prompt=generate_prompt(question),
+                temperature=0.6,
+                max_tokens=512,
+            )
+            app.logger.info("response: %s" % response)
+            result = response.choices[0].text
+            app.logger.info("result: %s" % result)
+        except openai.error.APIError as e:
+            result = f"OpenAI API returned an API Error: {e}" 
+            app.logger.error(result)
+        except openai.error.APIConnectionError as e:
+            result = f"Failed to connect to OpenAI API: {e}"
+            app.logger.error(result)
+        except openai.error.RateLimitError as e:
+            result = f"OpenAI API request exceeded rate limit: {e}"
+            app.logger.error(result)
+        return redirect(url_for("index", question=question, result=result))
 
     result = request.args.get("result")
     question = request.args.get("question")
