@@ -38,6 +38,9 @@ def index():
         except openai.error.RateLimitError as e:
             result = f"OpenAI API request exceeded rate limit: {e}"
             app.logger.error(result)
+        except openai.error.InvalidRequestError as e:
+            result = f"Request to OpenAI API is invalid: {e}"
+            app.logger.error(result)
         return redirect(url_for("index", question=question, result=result))
 
     result = request.args.get("result")
