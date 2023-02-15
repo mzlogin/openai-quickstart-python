@@ -22,8 +22,9 @@ def index():
                 # model="text-babbage-001",
                 # model="text-ada-001",
                 prompt=generate_prompt(question),
-                temperature=0.6,
+                temperature=0.3,
                 max_tokens=512,
+                stop=" END",
             )
             app.logger.info("response: %s" % response)
             result = response.choices[0].text
@@ -45,7 +46,13 @@ def index():
 
 
 def generate_prompt(question):
-    return question
+    # if 'xxx' in question:
+    #     question = '%s ->' % (question)
+
+    return """I am a highly intelligent question answering bot. If you ask me a question that is rooted in truth, I will give you the answer. If you ask me a question that is nonsense, trickery, or has no clear answer, I will respond with "不知道".
+
+Q: {}
+A:""".format(question)
 
 if __name__ == '__main__':
     logHandler = logging.FileHandler('flask.log')
